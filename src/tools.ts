@@ -1,3 +1,5 @@
+//  my-agent/src/tools.ts
+
 /**
  * Tool definitions for the AI chat agent
  * Tools can either require human confirmation or execute automatically

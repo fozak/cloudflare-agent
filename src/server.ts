@@ -1,3 +1,4 @@
+//
 import { routeAgentRequest, type Schedule } from "agents";
 import { getSchedulePrompt } from "agents/schedule";
 import { AIChatAgent } from "@cloudflare/ai-chat";
@@ -30,15 +31,12 @@ export class Chat extends AIChatAgent<Env> {
     _options?: { abortSignal?: AbortSignal }
   ) {
     // ✅ Create OpenAI client with API key from env
-    const openai = createOpenAI({
-      apiKey: this.env.OPENAI_API_KEY,
-    });
+      // ✅ Create OpenAI client with API key from env
+  const openai = createOpenAI({
+    apiKey: this.env.OPENAI_API_KEY,
+  });
 
-    const apiKey = env.OPENAI_API_KEY ?? process.env.OPENAI_API_KEY;
-
-const model = openai("gpt-4o-2024-11-20", {
-  apiKey
-});
+  const model = openai("gpt-4o-2024-11-20");
   
 
     // Collect all tools, including MCP tools if available
