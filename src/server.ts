@@ -120,6 +120,21 @@ export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext) {
     const url = new URL(request.url);
 
+    // 🔍 ADD THIS DEBUG ENDPOINT
+    if (url.pathname === "/debug-env") {
+      return Response.json({
+        hasKey: !!env.OPENAI_API_KEY,
+        keyType: typeof env.OPENAI_API_KEY,
+        keyLength: env.OPENAI_API_KEY?.length || 0,
+        keyPreview: env.OPENAI_API_KEY 
+          ? `${env.OPENAI_API_KEY.substring(0, 7)}...${env.OPENAI_API_KEY.substring(env.OPENAI_API_KEY.length - 4)}`
+          : "MISSING",
+        allEnvKeys: Object.keys(env),
+        envAI: !!env.AI,
+        envChat: !!env.Chat
+      });
+    }
+
     if (url.pathname === "/check-open-ai-key") {
       const hasOpenAIKey = !!env.OPENAI_API_KEY;
       return Response.json({
@@ -134,7 +149,6 @@ export default {
     }
     
     return (
-      // Route the request to our agent or return 404 if not found
       (await routeAgentRequest(request, env)) ||
       new Response("Not found", { status: 404 })
     );
