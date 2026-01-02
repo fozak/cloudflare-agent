@@ -1,7 +1,5 @@
 import { routeAgentRequest, type Schedule } from "agents";
-
 import { getSchedulePrompt } from "agents/schedule";
-
 import { AIChatAgent } from "@cloudflare/ai-chat";
 import {
   generateId,
@@ -13,11 +11,12 @@ import {
   createUIMessageStreamResponse,
   type ToolSet
 } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { createOpenAI } from "@ai-sdk/openai";  // ✅ Changed import
 import { processToolCalls, cleanupMessages } from "./utils";
 import { tools, executions } from "./tools";
 
-const model = openai("gpt-4o-2024-11-20");
+// ❌ Remove this line - don't create model at module level
+// const model = openai("gpt-4o-2024-11-20");
 
 /**
  * Chat Agent implementation that handles real-time AI chat interactions
@@ -30,6 +29,12 @@ export class Chat extends AIChatAgent<Env> {
     onFinish: StreamTextOnFinishCallback<ToolSet>,
     _options?: { abortSignal?: AbortSignal }
   ) {
+    // ✅ Create OpenAI client with API key from env
+    const openai = createOpenAI({
+      apiKey: this.env.OPENAI_API_KEY,
+    });
+    const model = openai("gpt-4o-2024-11-20");
+
     // Collect all tools, including MCP tools if available
     let mcpTools = {};
     try {
@@ -72,8 +77,8 @@ If the user asks to schedule a task, use the schedule tool to schedule the task.
           // Type boundary: streamText expects specific tool types, but base class uses ToolSet
           // This is safe because our tools satisfy ToolSet interface (verified by 'satisfies' in tools.ts)
           onFinish: onFinish as unknown as StreamTextOnFinishCallback<
-  typeof allTools
->,
+            typeof allTools
+          >,
           stopWhen: stepCountIs(10)
         });
 
@@ -112,13 +117,13 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/check-open-ai-key") {
-      const hasOpenAIKey = !!env.OPENAI_API_KEY;  // ✅ Fixed: use env, not process.env
+      const hasOpenAIKey = !!env.OPENAI_API_KEY;
       return Response.json({
         success: hasOpenAIKey
       });
     }
     
-    if (!env.OPENAI_API_KEY) {  // ✅ Fixed: use env, not process.env
+    if (!env.OPENAI_API_KEY) {
       console.error(
         "OPENAI_API_KEY is not set, don't forget to set it locally in .dev.vars, and use `wrangler secret put OPENAI_API_KEY` to upload it to production"
       );
