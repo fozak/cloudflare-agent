@@ -1,4 +1,4 @@
-// summary-and-todos.js
+// https://claude.ai/chat/9a317e3d-6686-49fd-82c6-365afa8ac2b4
 
 const projectSummary = {
   "completed": {
