@@ -71,9 +71,9 @@ If the user asks to schedule a task, use the schedule tool to schedule the task.
           tools: allTools,
           // Type boundary: streamText expects specific tool types, but base class uses ToolSet
           // This is safe because our tools satisfy ToolSet interface (verified by 'satisfies' in tools.ts)
-          onFinish: onFinish as unknown as StreamTextOnFinishCallback
-            typeof allTools
-          >,
+          onFinish: onFinish as unknown as StreamTextOnFinishCallback<
+  typeof allTools
+>,
           stopWhen: stepCountIs(10)
         });
 
