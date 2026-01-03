@@ -1,4 +1,4 @@
-//
+// my-agent/src/server.ts
 import { routeAgentRequest, type Schedule } from "agents";
 import { getSchedulePrompt } from "agents/schedule";
 import { AIChatAgent } from "@cloudflare/ai-chat";

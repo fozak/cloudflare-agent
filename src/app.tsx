@@ -1,3 +1,5 @@
+
+// my-agent/src/app.tsx
 /** biome-ignore-all lint/correctness/useUniqueElementIds: it's alright */
 import { useEffect, useState, useRef, useCallback, use } from "react";
 import { useAgent } from "agents/react";
