@@ -36,7 +36,7 @@ export class Chat extends AIChatAgent<Env> {
     apiKey: this.env.OPENAI_API_KEY,
   });
 
-  const model = openai("gpt-4o-2024-11-20");
+  const model = openai("gpt-4.1-nano");
   
 
     // Collect all tools, including MCP tools if available
